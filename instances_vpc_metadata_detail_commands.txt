@@ -1,0 +1,148 @@
+=======================  List Running Instances only : ================
+
+aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" --query Reservations[*].Instances[*].["InstanceId","InstanceType","PrivateIpAddress","Tags[?Key=='Name']|[0].Value"] --output table
+-----------------------------------------------------------------------------------
+|                                DescribeInstances                                |
++----------------------+-----------+-------------+--------------------------------+
+|  i-05ef12a99baf2a135 |  t3.micro |  10.0.1.93  |  Abhinav_Basion_Host_Instance  |
+|  i-038ecdf0b4ddbc27f |  t3.micro |  10.0.3.147 |  Abhinav_DB_Instance           |
+|  i-0903795d46d097adf |  t3.micro |  10.0.2.217 |  Abhinav_App_Instance          |
++----------------------+-----------+-------------+--------------------------------+
+
+================================================================================================
+
+
+
+
+========================== List All Instances ==================
+aws ec2 describe-instances --query Reservations[*].Instances[*].["InstanceId","State.Name","Tags[?Key=='Name']|[0].Value","PlatformDetails","Hypervisor"] --output table
+-----------------------------------------------------------------------------------------
+|                                   DescribeInstances                                   |
++----------------------+----------+--------------------------------+-------------+------+
+|  i-05ef12a99baf2a135 |  running |  Abhinav_Basion_Host_Instance  |  Windows    |  xen |
+|  i-038ecdf0b4ddbc27f |  running |  Abhinav_DB_Instance           |  Windows    |  xen |
+|  i-0903795d46d097adf |  running |  Abhinav_App_Instance          |  Windows    |  xen |
+|  i-0faa819ca165c2cb3 |  stopped |  jenkins23                     |  Linux/UNIX |  xen |
++----------------------+----------+--------------------------------+-------------+------+
+
+====================================================================================================
+
+
+
+
+
+=================================  List All Instances  with ENI interface ======================
+aws ec2 describe-instances --query Reservations[*].Instances[*].["InstanceId","Tags[?Key=='Name']|[0].Value","PlatformDetails","NetworkInterfaces[0].Attachment.AttachmentId"] --output table
+-------------------------------------------------------------------------------------------------------
+|                                          DescribeInstances                                          |
++---------------------+--------------------------------+-------------+--------------------------------+
+|  i-05ef12a99baf2a135|  Abhinav_Basion_Host_Instance  |  Windows    |  eni-attach-08ffe40c95c099346  |
+|  i-038ecdf0b4ddbc27f|  Abhinav_DB_Instance           |  Windows    |  eni-attach-00a2a2394b0039935  |
+|  i-0903795d46d097adf|  Abhinav_App_Instance          |  Windows    |  eni-attach-08fac678b86856294  |
+|  i-0faa819ca165c2cb3|  jenkins23                     |  Linux/UNIX |  eni-attach-01b1d15c0a42f9df3  |
++---------------------+--------------------------------+-------------+--------------------------------+
+
+==========================================================================================================================
+
+
+
+
+
+======================================  List All Instances with Subnet ID and VPC ID and AZ details ================
+
+ aws ec2 describe-instances --query Reservations[*].Instances[*].["Tags[?Key=='Name']|[0].Value","PlatformDetails","PrivateIpAddress","SubnetId","Placement.AvailabilityZone","VpcId"] --output table
+------------------------------------------------------------------------------------------------------------------------------------
+|                                                         DescribeInstances                                                        |
++------------------------------+-------------+---------------+---------------------------+---------------+-------------------------+
+|  Abhinav_Basion_Host_Instance|  Windows    |  10.0.1.93    |  subnet-0df4a4918bc05a800 |  eu-north-1a  |  vpc-0e2aecd9c4dfcb701  |
+|  Abhinav_DB_Instance         |  Windows    |  10.0.3.147   |  subnet-0644822b072aafbfc |  eu-north-1a  |  vpc-0e2aecd9c4dfcb701  |
+|  Abhinav_App_Instance        |  Windows    |  10.0.2.217   |  subnet-04a5e80f3526cf891 |  eu-north-1a  |  vpc-0e2aecd9c4dfcb701  |
+|  jenkins23                   |  Linux/UNIX |  172.31.47.76 |  subnet-0b47334d4ff95bb13 |  eu-north-1b  |  vpc-03fd41b80de610b39  |
++------------------------------+-------------+---------------+---------------------------+---------------+-------------------------+
+
+
+==============================================================================================================================
+
+
+
+
+
+==============================  List Only Instances launch in VPC vpc-0e2aecd9c4dfcb701  ==============================
+
+ aws ec2 describe-instances --filters "Name=vpc-id,Values=vpc-0e2aecd9c4dfcb701" --query Reservations[*].Instances[*].["InstanceId","InstanceType","PrivateIpAddress","Tags[?Key=='Name']|[0].Value","SubnetId"] --output table
+---------------------------------------------------------------------------------------------------------------
+|                                              DescribeInstances                                              |
++---------------------+-----------+-------------+--------------------------------+----------------------------+
+|  i-05ef12a99baf2a135|  t3.micro |  10.0.1.93  |  Abhinav_Basion_Host_Instance  |  subnet-0df4a4918bc05a800  |
+|  i-038ecdf0b4ddbc27f|  t3.micro |  10.0.3.147 |  Abhinav_DB_Instance           |  subnet-0644822b072aafbfc  |
+|  i-0903795d46d097adf|  t3.micro |  10.0.2.217 |  Abhinav_App_Instance          |  subnet-04a5e80f3526cf891  |
++---------------------+-----------+-------------+--------------------------------+----------------------------+
+
+
+==============================================================================================================================
+
+
+
+
+==============================  List All VPCs  ==================================================================
+
+$ aws ec2 describe-vpcs --query Vpcs[*].["CidrBlock","VpcId","Tags[?Key=='Name']|[0].Value"] --output table
+-----------------------------------------------------------
+|                      DescribeVpcs                       |
++---------------+-------------------------+---------------+
+|  10.0.0.0/16  |  vpc-0e2aecd9c4dfcb701  |  ABHINAV-VPC  |
+|  172.31.0.0/16|  vpc-03fd41b80de610b39  |  None         |
+
+===================================================================================================================================
+
+
+
+
+==============================   List the VPC based on Key Value Pair =======================================================
+
+$ aws ec2 describe-vpcs --filters "Name=tag:Name,Values=ABHINAV-VPC" --query Vpcs[*].["CidrBlock","VpcId","Tags[?Key=='Name']|[0].Value"] --output table
+---------------------------------------------------------
+|                     DescribeVpcs                      |
++-------------+-------------------------+---------------+
+|  10.0.0.0/16|  vpc-0e2aecd9c4dfcb701  |  ABHINAV-VPC  |
++-------------+-------------------------+---------------+
+
+==================================================================================================================================
+
+
+
+
+=================================  List Subnets under VPC vpc-0e2aecd9c4dfcb701  =========================================================
+
+ aws ec2 describe-subnets --filters "Name=vpc-id,Values=vpc-0e2aecd9c4dfcb701" --query Subnets[*].["AvailabilityZone","Tags[?Key=='Name']|[0].Value","SubnetId"] --output table
+------------------------------------------------------------------------------
+|                               DescribeSubnets                              |
++-------------+---------------------------------+----------------------------+
+|  eu-north-1a|  ABHINAV-PRIVATE-SUBNET-APP-1A  |  subnet-04a5e80f3526cf891  |
+|  eu-north-1b|  ABHINAV-PUBLIC-SUBNET-1B       |  subnet-00d6f5f1b8ffa02ab  |
+|  eu-north-1a|  ABHINAV-PRIVATE-SUBNET-DB-1A   |  subnet-0644822b072aafbfc  |
+|  eu-north-1b|  ABHINAV-PRIVATE-SUBNET-APP-1B  |  subnet-0f986b431b8435b5a  |
+|  eu-north-1a|  ABHINAV-PUBLIC-SUBNET-1A       |  subnet-0df4a4918bc05a800  |
+|  eu-north-1b|  ABHINAV-PRIVATE-SUBNET-DB-1B   |  subnet-0d94273d2f39ff541  |
++-------------+---------------------------------+----------------------------+
+
+=================================================================================================================================================
+
+
+
+
+==============================  List Route Table based on Key Value Pairs  ==========================================
+
+ aws ec2 describe-route-tables --filters "Name=tag:Name,Values=Abhinav*" --query RouteTables[*].["Tags[?Key=='Name']|[0].Value","VpcId","Associations[0].RouteTableId"] --output table
+---------------------------------------------------------------------------------------
+|                                 DescribeRouteTables                                 |
++---------------------------------+-------------------------+-------------------------+
+|  Abhinav-DBPrivateRouteTable    |  vpc-0e2aecd9c4dfcb701  |  rtb-03d5058b23e4f56fe  |
+|  Abhinav-BastionPublicRouteTable|  vpc-0e2aecd9c4dfcb701  |  rtb-04d4f51d65902519e  |
+|  Abhinav-AppPrivateRouteTable   |  vpc-0e2aecd9c4dfcb701  |  rtb-081acdf9e7b51bdef  |
++---------------------------------+-------------------------+-------------------------+
+
+
+==========================================================================================================================================
+
+
