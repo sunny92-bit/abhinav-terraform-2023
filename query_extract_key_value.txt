@@ -1,0 +1,42 @@
+======================  BASH SCRIPT TO EXTRACT RESOURCE TYPE , NAME , PRIVATE_IP , TAGS , We are passing JSON file ,Private_ip , Tags as arguments to bash script==============================
+
+#!/bin/bash
+json_file=$1
+private_ip="$2"
+tagname="$3"
+if [ ! -f "$json_file" ]; then
+  echo "Error: JSON file '$json_file' not found."
+  exit 1
+fi
+cat "$json_file" | jq -c --arg private_ip "$private_ip" --arg tagname "$tagname" '.resources[].instances[].attributes | { ($private_ip): .[$private_ip], ($tagname): .[$tagname] }'
+
+======================  OUTPUT ==============================
+
+./extract_private_ip_tags.sh query.json private_ip tags
+
+{"type":"aws_eip","name":"nat","private_ip":"","tags":{"Name":"ABHINAV-EIP1"}}
+{"type":"aws_instance","name":"app_private_ec2","private_ip":"10.0.2.200","tags":{"Application":" App Server","Name":"Abhinav_App_Instance"}}
+{"type":"aws_instance","name":"db_private_ec2","private_ip":"10.0.3.137","tags":{"Application":" DB Server","Name":"Abhinav_DB_Instance"}}
+{"type":"aws_instance","name":"public_ec2","private_ip":"10.0.1.220","tags":{"Application":" Jump Server","Name":"Abhinav_Basion_Host_Instance"}}
+{"type":"aws_internet_gateway","name":"abhinav_igw","private_ip":null,"tags":{"Name":"ABHINAV-MyInternetGateway"}}
+{"type":"aws_nat_gateway","name":"my_nat_gateway","private_ip":"10.0.1.23","tags":{"Name":"ABHINAV-NatGateway"}}
+{"type":"aws_route_table","name":"database-route-table","private_ip":null,"tags":{"Name":"Abhinav-DBPrivateRouteTable"}}
+{"type":"aws_route_table","name":"private-route-table","private_ip":null,"tags":{"Name":"Abhinav-AppPrivateRouteTable"}}
+{"type":"aws_route_table","name":"public-route-table","private_ip":null,"tags":{"Name":"Abhinav-BastionPublicRouteTable"}}
+{"type":"aws_route_table_association","name":"dbprivate1","private_ip":null,"tags":null}
+{"type":"aws_route_table_association","name":"dbprivate2","private_ip":null,"tags":null}
+{"type":"aws_route_table_association","name":"private1","private_ip":null,"tags":null}
+{"type":"aws_route_table_association","name":"private2","private_ip":null,"tags":null}
+{"type":"aws_route_table_association","name":"public1","private_ip":null,"tags":null}
+{"type":"aws_route_table_association","name":"public2","private_ip":null,"tags":null}
+{"type":"aws_security_group","name":"private_sg","private_ip":null,"tags":{"Name":"SG-PRIVATE-APP-ABHINAV"}}
+{"type":"aws_security_group","name":"public_sg","private_ip":null,"tags":{"Name":"SG-PUBLIC-ABHINAV"}}
+{"type":"aws_subnet","name":"privateapp1","private_ip":null,"tags":{"Name":"ABHINAV-PRIVATE-SUBNET-APP-1A"}}
+{"type":"aws_subnet","name":"privateapp2","private_ip":null,"tags":{"Name":"ABHINAV-PRIVATE-SUBNET-APP-1B"}}
+{"type":"aws_subnet","name":"privatedatabase1","private_ip":null,"tags":{"Name":"ABHINAV-PRIVATE-SUBNET-DB-1A"}}
+{"type":"aws_subnet","name":"privatedatabase2","private_ip":null,"tags":{"Name":"ABHINAV-PRIVATE-SUBNET-DB-1B"}}
+{"type":"aws_subnet","name":"public1","private_ip":null,"tags":{"Name":"ABHINAV-PUBLIC-SUBNET-1A"}}
+{"type":"aws_subnet","name":"public2","private_ip":null,"tags":{"Name":"ABHINAV-PUBLIC-SUBNET-1B"}}
+{"type":"aws_vpc","name":"sunny","private_ip":null,"tags":{"Name":"ABHINAV-VPC"}}
+
+======================================================================================================================
