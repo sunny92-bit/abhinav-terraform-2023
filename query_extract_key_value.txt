@@ -185,28 +185,130 @@ function extract_attribute_from_json() {
 
 result=$(extract_attribute_from_json "${param}" "${query}")
 echo "$result"
+==============================
 
-#!/bin/bash
+[root@ip-172-31-47-76 ~]# ./extract_metadata.sh
 
-echo -n "Pass the attritube value to look for : "
-read param
-echo -n "Pass the json file name -query.json : "
-read query
-function extract_attribute_from_json() {
-    local attribute="$1"
-    local json_file="$2"
-
-    
-    if [ ! -f "$json_file" ]; then
-        echo "Error: JSON file '$json_file' not found."
-        return 1
-    fi
-    
-     jq -r '.resources[] | {type: .type, name: .name, attribute: .instances[].attributes["'"$attribute"'"]}' "$json_file"
-
+Pass the attritube value to look for : id
+Pass the json file name -query.json : query.json
+{
+  "type": "aws_eip",
+  "name": "nat",
+  "attribute": "eipalloc-04ab7ee50a251ac17"
 }
-
-result=$(extract_attribute_from_json "${param}" "${query}")
-echo "$result"
-
-============================================================================
+{
+  "type": "aws_instance",
+  "name": "app_private_ec2",
+  "attribute": "i-0229fb5ee2ed16182"
+}
+{
+  "type": "aws_instance",
+  "name": "db_private_ec2",
+  "attribute": "i-0570ca476c74cfd25"
+}
+{
+  "type": "aws_instance",
+  "name": "public_ec2",
+  "attribute": "i-0e1d7c3dc9cfde906"
+}
+{
+  "type": "aws_internet_gateway",
+  "name": "abhinav_igw",
+  "attribute": "igw-025d08ddcbee2f3c4"
+}
+{
+  "type": "aws_nat_gateway",
+  "name": "my_nat_gateway",
+  "attribute": "nat-0fa9d9c8c8a03a1e9"
+}
+{
+  "type": "aws_route_table",
+  "name": "database-route-table",
+  "attribute": "rtb-03d3b3a90d98b7174"
+}
+{
+  "type": "aws_route_table",
+  "name": "private-route-table",
+  "attribute": "rtb-0164d009bde2259cc"
+}
+{
+  "type": "aws_route_table",
+  "name": "public-route-table",
+  "attribute": "rtb-0b90bd105a9206a48"
+}
+{
+  "type": "aws_route_table_association",
+  "name": "dbprivate1",
+  "attribute": "rtbassoc-0b2a50d85e1251806"
+}
+{
+  "type": "aws_route_table_association",
+  "name": "dbprivate2",
+  "attribute": "rtbassoc-06b6cc2c6ed914b37"
+}
+{
+  "type": "aws_route_table_association",
+  "name": "private1",
+  "attribute": "rtbassoc-0e92f50d2a24359a1"
+}
+{
+  "type": "aws_route_table_association",
+  "name": "private2",
+  "attribute": "rtbassoc-07ff2682cc52265ba"
+}
+{
+  "type": "aws_route_table_association",
+  "name": "public1",
+  "attribute": "rtbassoc-0152cb1812438dd60"
+}
+{
+  "type": "aws_route_table_association",
+  "name": "public2",
+  "attribute": "rtbassoc-06d6708a29cbfff83"
+}
+{
+  "type": "aws_security_group",
+  "name": "private_sg",
+  "attribute": "sg-0df6a81bd8d4aafec"
+}
+{
+  "type": "aws_security_group",
+  "name": "public_sg",
+  "attribute": "sg-0277eb40e30f1ffc3"
+}
+{
+  "type": "aws_subnet",
+  "name": "privateapp1",
+  "attribute": "subnet-03878859bbf145b0e"
+}
+{
+  "type": "aws_subnet",
+  "name": "privateapp2",
+  "attribute": "subnet-058a684b801df9ed5"
+}
+{
+  "type": "aws_subnet",
+  "name": "privatedatabase1",
+  "attribute": "subnet-0ba01b59c3d2ad4a1"
+}
+{
+  "type": "aws_subnet",
+  "name": "privatedatabase2",
+  "attribute": "subnet-07982a3460985d04c"
+}
+{
+  "type": "aws_subnet",
+  "name": "public1",
+  "attribute": "subnet-059a0dfcc5639d62d"
+}
+{
+  "type": "aws_subnet",
+  "name": "public2",
+  "attribute": "subnet-0b339d91496fdad7c"
+}
+{
+  "type": "aws_vpc",
+  "name": "sunny",
+  "attribute": "vpc-0100a7fcfbc728846"
+}
+==========================================================================================================================
