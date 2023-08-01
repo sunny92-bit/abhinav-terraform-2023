@@ -2,9 +2,12 @@
 =========================  BASH FUNCTION UPDATED NOW WE CAN PASS ATTRIBUTE NAME & JSON FILE AS ARGUMENTS TO THE SCRIPT ===============
 
 #!/bin/bash
-
+echo  "List of Attributes Present in JSON which you can select as 1st Argument"
+echo -e "\n id ,\n private_ip ,\n public_ip ,\n tags "
+echo " "
 echo -n "Pass the attritube value to look for : "
 read param
+echo " "
 echo -n "Pass the json file name -query.json : "
 read query
 function extract_attribute_from_json() {
@@ -23,11 +26,18 @@ function extract_attribute_from_json() {
 
 result=$(extract_attribute_from_json "${param}" "${query}")
 echo "$result"
-==============================
+============================== OUTPUT =============================================
 
 [root@ip-172-31-47-76 ~]# ./extract_metadata.sh
+List of Attributes Present in JSON which you can select as 1st Argument
 
+ id ,
+ private_ip ,
+ public_ip ,
+ tags 
+ 
 Pass the attritube value to look for : id
+ 
 Pass the json file name -query.json : query.json
 {
   "type": "aws_eip",
